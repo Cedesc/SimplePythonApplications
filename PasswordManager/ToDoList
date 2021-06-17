@@ -1,0 +1,7 @@
+Features:
+    - encryption and decryption
+    - save encrypted passwords
+    - read decrypted passwords
+
+Already Finished:
+    - generate secure passwords
