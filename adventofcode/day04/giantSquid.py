@@ -1,6 +1,6 @@
 
 
-class Bingo_Board:
+class BingoBoard:
 
     def __init__(self, numbers_on_board: list[int]):
 
@@ -76,7 +76,7 @@ class Bingo_Board:
     def check_all_columns(self) -> bool:
         """ Check all columns if ONE of them is fully marked """
         for row_index in range(5):
-            if self.check_row(row_index):
+            if self.check_column(row_index):
                 return True
         return False
 
@@ -90,15 +90,16 @@ class Bingo_Board:
         for row_index in range(5):
             for column_index in range(5):
                 if not self.mark_rows[row_index][column_index]:
+                    print(self.data_rows[row_index][column_index])
                     result += self.data_rows[row_index][column_index]
         return result
 
 
 
-def transform_txt_file(binary_report_text_file: str) -> (list[int], list[Bingo_Board]):
+def transform_txt_file(binary_report_text_file: str) -> (list[int], list[BingoBoard]):
 
     bingo_numbers: list[int]
-    bingo_boards: list[Bingo_Board] = []
+    bingo_boards: list[BingoBoard] = []
 
     with open(binary_report_text_file, "r") as file:
         txt_elements: list[str] = file.read().split("\n\n")
@@ -114,25 +115,20 @@ def transform_txt_file(binary_report_text_file: str) -> (list[int], list[Bingo_B
                     new_board_data.append(int(number_or_empty))
             # Alternative to the previous 3 lines:
             # new_board_data += list(map(lambda s: int(s), filter(lambda el: el != "", element_row.split(" "))))
-        bingo_boards.append(Bingo_Board(new_board_data))
+        bingo_boards.append(BingoBoard(new_board_data))
         new_board_data.clear()
-
-    print(bingo_numbers)
-    print(bingo_boards[3])
-    print(bingo_boards[3].mark_row3)
-    bingo_boards[3].mark_number(40)
-    print(bingo_boards[3].mark_row3)
 
     return bingo_numbers, bingo_boards
 
 
-def bingo_calculation(input_numbers: list[int], possible_boards: list[Bingo_Board]) -> int:
+def bingo_calculation(input_numbers: list[int], possible_boards: list[BingoBoard]) -> int:
 
     for number in input_numbers:
         for board in possible_boards:
             board.mark_number(number)
             if board.check_all_rows_and_columns():
                 return number * board.sum_of_all_unmarked_numbers()
+    return -1
 
 
 
@@ -141,4 +137,3 @@ if __name__ == '__main__':
     numbers, boards = transform_txt_file('bingoBoards.txt')
 
     print(bingo_calculation(numbers, boards))
-
