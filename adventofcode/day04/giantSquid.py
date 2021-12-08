@@ -24,6 +24,8 @@ class BingoBoard:
             self.mark_rows: list[list[bool]] = [self.mark_row0, self.mark_row1, self.mark_row2,
                                                 self.mark_row3, self.mark_row4]
 
+            self.finished: bool = False
+
     def __str__(self):
         return f"{self.data_row0}   {self.mark_row0}\n" \
                f"{self.data_row1}   {self.mark_row1}\n" \
@@ -90,9 +92,17 @@ class BingoBoard:
         for row_index in range(5):
             for column_index in range(5):
                 if not self.mark_rows[row_index][column_index]:
-                    print(self.data_rows[row_index][column_index])
                     result += self.data_rows[row_index][column_index]
         return result
+
+    def isFinished(self) -> bool:
+        return self.finished
+
+    def check_if_newly_won(self) -> bool:
+        if self.check_all_rows_and_columns() and not self.isFinished():
+            self.finished = True
+            return True
+        return False
 
 
 
@@ -121,7 +131,7 @@ def transform_txt_file(binary_report_text_file: str) -> (list[int], list[BingoBo
     return bingo_numbers, bingo_boards
 
 
-def bingo_calculation(input_numbers: list[int], possible_boards: list[BingoBoard]) -> int:
+def bingo_calculation_to_win(input_numbers: list[int], possible_boards: list[BingoBoard]) -> int:
 
     for number in input_numbers:
         for board in possible_boards:
@@ -131,9 +141,25 @@ def bingo_calculation(input_numbers: list[int], possible_boards: list[BingoBoard
     return -1
 
 
+def bingo_calculation_to_win_at_least(input_numbers: list[int], possible_boards: list[BingoBoard]) -> int:
+
+    score_of_boards: list[tuple[BingoBoard, int]] = []
+
+    for number in input_numbers:
+        for board in possible_boards:
+            board.mark_number(number)
+            if board.check_if_newly_won():
+                score_of_boards.append((board, number * board.sum_of_all_unmarked_numbers()))
+    return score_of_boards[-1][1]
+
+
 
 if __name__ == '__main__':
 
     numbers, boards = transform_txt_file('bingoBoards.txt')
 
-    print(bingo_calculation(numbers, boards))
+    print(f"Bingo Calculation to win (number * sum of unmarked board entries): "
+          f"{bingo_calculation_to_win(numbers, boards)}\n")
+
+    print(f"Bingo Calculation to win at least (number * sum of unmarked board entries): "
+          f"{bingo_calculation_to_win_at_least(numbers, boards)}")
