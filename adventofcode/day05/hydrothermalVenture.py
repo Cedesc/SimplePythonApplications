@@ -55,32 +55,33 @@ def calculate_vent_map(coordinates: list[tuple[tuple[int, int], tuple[int, int]]
         elif with_diagonals:
             if start_x <= end_x:
                 if start_y <= end_y:  # left top to right bot
-                    print(f"left top to right bot with "
-                          f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
+                    # print(f"left top to right bot with "
+                    #       f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
                     for i in range(end_x + 1 - start_x):
                         vent_map[start_y + i][start_x + i] += 1
                 else:  # left bot to right top
-                    print(f"left bot to right top with "
-                          f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
+                    # print(f"left bot to right top with "
+                    #       f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
                     for i in range(end_x + 1 - start_x):
                         vent_map[start_y - i][start_x + i] += 1
             else:
                 if start_y <= end_y:  # right top to left bot
-                    print(f"right top to left bot with "
-                          f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
-                    for i in range(end_x + 1 - start_x):
+                    # print(f"right top to left bot with "
+                    #       f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
+                    for i in range(start_x + 1 - end_x):
                         vent_map[start_y + i][start_x - i] += 1
                 else:  # right bot to left top
-                    print(f"right bot to left top with "
-                          f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
-                    for i in range(end_x + 1 - start_x):
+                    # print(f"right bot to left top with "
+                    #       f"start_x = {start_x}, end_x = {end_x}, start_y = {start_y}, end_y = {end_y}")
+                    for i in range(start_x + 1 - end_x):
                         vent_map[start_y - i][start_x - i] += 1
 
-        # else:
-        #     print("Error! Every Vent should be vertical, horizontal or 45 Degrees diagonal!")
-        #     print(f"Start x: {start_x}  End x: {end_x}\n"
-        #           f"Start y: {start_y}  End y: {end_y}")
-    print(vent_map)  # todo delete
+
+    # For debugging, shows the vent map
+    # print("\n  ", [i for i in range(len(vent_map[0]))])
+    # for row_index in range(len(vent_map)):
+    #     print(f"{row_index}: {vent_map[row_index]}")
+
     return vent_map
 
 
@@ -102,10 +103,12 @@ def calculate_overlapping_points(coordinates: list[tuple[tuple[int, int], tuple[
 
 if __name__ == '__main__':
 
-    coords: list[tuple[tuple[int, int], tuple[int, int]]] = transform_txt_file('ventTest.txt')
+    coords: list[tuple[tuple[int, int], tuple[int, int]]] = transform_txt_file('ventCoordinates.txt')
 
     # without Diagonals
-    print(calculate_overlapping_points(coords, with_diagonals=False))  # 7473
+    print(f"Number of overlapping points, diagonals not considered "
+          f"{calculate_overlapping_points(coords, with_diagonals=False)}")  # 7473
 
     # with Diagonals
-    # print(calculate_overlapping_points(coords, with_diagonals=True))
+    print(f"Number of overlapping points, diagonals considered "
+          f"{calculate_overlapping_points(coords, with_diagonals=True)}")  # 24164
