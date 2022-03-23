@@ -38,8 +38,6 @@ def add_items_to_playlist(access_token: str, playlist_id: str, uris: list[str]):
             "Authorization": f"Bearer {access_token}"
         },
         json={
-            # "uris": ["spotify:track:4pbTElMDaHrkLOfOv8nUdC",
-            #          "spotify:track:1301WleyT98MSxVHPZCA6M"]
             "uris": uris
         }
     )
@@ -76,14 +74,14 @@ def convert_song_ids_to_uris(ids: list[str]) -> list[str]:
 
 def merge_dohmaen_parts(get_playlist_items_token: str, create_playlist_token: str, add_items_to_playlist_token: str):
 
-    my_dohmaen_part_id = "308VV4yDDA065rhU9EgrGf"  # todo
-    robins_dohmaen_part_id = "3So0E5adOPpsBzcnBWe1zu"  # todo
+    christians_dohmaen_part_id = "308VV4yDDA065rhU9EgrGf"  # todo correct playlist id
+    robins_dohmaen_part_id = "3So0E5adOPpsBzcnBWe1zu"  # todo correct playlist id
 
     # get songs of the playlists
-    songs_part_1 = get_playlist_items(get_playlist_items_token, my_dohmaen_part_id, limit=25)
-    print(songs_part_1)  # todo
+    songs_part_1 = get_playlist_items(get_playlist_items_token, christians_dohmaen_part_id, limit=25)
+    print(f"Get songs - part 1: {songs_part_1}")
     songs_part_2 = get_playlist_items(get_playlist_items_token, robins_dohmaen_part_id, limit=25)
-    print(songs_part_2)  # todo
+    print(f"Get songs - part 2: {songs_part_1}")
     # todo can I get the songs of robins playlist???
 
     # convert to the ids
@@ -101,95 +99,33 @@ def merge_dohmaen_parts(get_playlist_items_token: str, create_playlist_token: st
     # create new playlist
     playlist_name: str = f"Dohmän {date.today().strftime('%d.%m.')}"
     playlist = create_playlist(create_playlist_token, playlist_name, public=True, description="")
-    print(playlist)  # todo
+    print(f"Create playlist: {playlist}")
     # save playlist id
     playlist_id = playlist['id']
 
     # fill playlist with songs
     added_elements = add_items_to_playlist(add_items_to_playlist_token, playlist_id, song_uris)
-    print(added_elements)  # todo
+    print(f"Added elements: {added_elements}")
 
     return added_elements
 
 
 def main():
-    # playlist = create_playlist_on_spotify(
-    #     name="My Private Playlist 4",
-    #     public=True,
-    #     description=""
-    # )
-    #
-    # print(f"Playlist: {playlist}")
 
+    # from https://developer.spotify.com/console/post-playlist-tracks/
+    get_playlist_items_token: str = \
+        "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
 
-    # me = get_me()
-    # print(me)
+    # from https://developer.spotify.com/console/post-playlists/
+    create_playlist_token: str = \
+        "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
 
-    # songs = add_items_to_playlist()
-    # print(songs)
-
-    # songs = get_playlist_items()
-    # print(songs)
-
-    # token = "BQCrr7DwuBx7FGnjoUSIEPgvPSVUaOsSv_6oQ8IIsN6jJ-REr9_HC5QRT_-SBTvEkLeqVw3whpTUYk_GcljmWMSba_6ZfwEXFiqKDsMx5_qkK3zoFd2frQV2syTuK2iqnNWJ66CsbMnpQYIViwzXyQ9-wZ8yixwduNqy0fCpYXQQOtLweHAHYc5Xw9mOUp83u-ZW2fLfkuvNAZduhyU"
-    # playlist = create_playlist(token, "Test 1", True, "Joa geht wohl")
-    # print(playlist['id'])
-
-    # https://developer.spotify.com/console/post-playlist-tracks/
-    get_playlist_items_token: str = "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
-
-    # https://developer.spotify.com/console/post-playlists/
-    create_playlist_token: str = "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
-
-    # https://developer.spotify.com/console/post-playlist-tracks/
-    add_items_to_playlist_token: str = "BQAt-i_TEfAVUXjtwmvm1Oid7VAk6K2LdjSOGL0wHxrtYLEgiyjTW23pr9TH02p32WVjv9EBWAekiwhHKnVslGAfmofu3OnX_lnZdjT2SPvYrfc3gIlXbL_JUa4SXzJNYM3fXbCo-fpk91ZYTz4ClV_vGl2AFGRWsme5FUUKciHbQLWexEBcBr55yeeSx3ckJcS2xZUZ_OBq4z8Efw8"
+    # from https://developer.spotify.com/console/post-playlist-tracks/
+    add_items_to_playlist_token: str = \
+        "BQAt-i_TEfAVUXjtwmvm1Oid7VAk6K2LdjSOGL0wHxrtYLEgiyjTW23pr9TH02p32WVjv9EBWAekiwhHKnVslGAfmofu3OnX_lnZdjT2SPvYrfc3gIlXbL_JUa4SXzJNYM3fXbCo-fpk91ZYTz4ClV_vGl2AFGRWsme5FUUKciHbQLWexEBcBr55yeeSx3ckJcS2xZUZ_OBq4z8Efw8"
 
     merge_dohmaen_parts(get_playlist_items_token, create_playlist_token, add_items_to_playlist_token)
 
 
 if __name__ == '__main__':
     main()
-
-
-# https://open.spotify.com/playlist/308VV4yDDA065rhU9EgrGf?si=f2534c275fa849d4
-
-
-""" songs:  https://open.spotify.com/track/4pbTElMDaHrkLOfOv8nUdC?si=e645e1100a8e4ecb
-            https://open.spotify.com/track/598B9RU1jZhObFSQJhisIa?si=20a59f76f8484ad4
-            https://open.spotify.com/track/1lnbl9uZjCdiyBUHRzS7ef?si=3ac848188a8d4e65
-"""
-# source 1:  308VV4yDDA065rhU9EgrGf
-# source 2:  3So0E5adOPpsBzcnBWe1zu
-# target:  14BD51yINR0Z6mmpJsauB7
-
-
-
-
-
-
-
-
-
-def get_artist():
-    response = requests.get(
-        f"https://api.spotify.com/v1/artists/cedesc3",
-        headers={
-            "Authorization": f"Bearer BQAgsju5CAnenrAPQmYUbbM-aDyfDAGYDlH1Gonq2AvzpbD40DLEsfV8lkw6MnKJdO4mFpcHMKiFlZetj-Jk8cinu6xnFfKBCP5mlcGNVfHtkju06AyNAT_Qrbeq9oDOSRizmQAm-8-GG3EL3ris-k9CB2XAzy1vYT2p8MiM83HD_nLkHIVIAAZF_e6Mw0UtKudrY0f3"
-        }
-    )
-    json_resp = response.json()
-
-    return json_resp
-
-
-def get_me():
-    response = requests.get(
-        "https://api.spotify.com/v1/me",
-        headers={
-            "Authorization": f"Bearer BQAgsju5CAnenrAPQmYUbbM-aDyfDAGYDlH1Gonq2AvzpbD40DLEsfV8lkw6MnKJdO4mFpcHMKiFlZetj-Jk8cinu6xnFfKBCP5mlcGNVfHtkju06AyNAT_Qrbeq9oDOSRizmQAm-8-GG3EL3ris-k9CB2XAzy1vYT2p8MiM83HD_nLkHIVIAAZF_e6Mw0UtKudrY0f3"
-        }
-    )
-
-    json_resp = response.json()
-
-    return json_resp
