@@ -1,6 +1,7 @@
 from random import shuffle
 from datetime import date
 import requests
+import config
 
 
 
@@ -72,17 +73,14 @@ def convert_song_ids_to_uris(ids: list[str]) -> list[str]:
     return [f"spotify:track:{song_id}" for song_id in ids]
 
 
-def merge_dohmaen_parts(get_playlist_items_token: str, create_playlist_token: str, add_items_to_playlist_token: str):
-
-    christians_dohmaen_part_id = "308VV4yDDA065rhU9EgrGf"  # todo correct playlist id
-    robins_dohmaen_part_id = "3So0E5adOPpsBzcnBWe1zu"  # todo correct playlist id
+def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: str, add_items_to_playlist_token: str,
+                         playlist_part_1: str, playlist_part_2: str, number_of_songs: int = 25):
 
     # get songs of the playlists
-    songs_part_1 = get_playlist_items(get_playlist_items_token, christians_dohmaen_part_id, limit=25)
+    songs_part_1 = get_playlist_items(get_playlist_items_token, playlist_part_1, limit=number_of_songs)
     print(f"Get songs - part 1: {songs_part_1}")
-    songs_part_2 = get_playlist_items(get_playlist_items_token, robins_dohmaen_part_id, limit=25)
+    songs_part_2 = get_playlist_items(get_playlist_items_token, playlist_part_2, limit=number_of_songs)
     print(f"Get songs - part 2: {songs_part_1}")
-    # todo can I get the songs of robins playlist???
 
     # convert to the ids
     ids_part_1: list[str] = extract_ids(songs_part_1)
@@ -110,21 +108,18 @@ def merge_dohmaen_parts(get_playlist_items_token: str, create_playlist_token: st
     return added_elements
 
 
+def refresh_tokens():
+    pass
+
+
 def main():
 
-    # from https://developer.spotify.com/console/post-playlist-tracks/
-    get_playlist_items_token: str = \
-        "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
-
-    # from https://developer.spotify.com/console/post-playlists/
-    create_playlist_token: str = \
-        "BQDMb3MrgMqiOMFbXb4jtmoxoo9cuwtFhGP6XLMd-_swm63Fuqqu5M73aIRz10Im60Bnv3Tj6kOlOF1vcLtqKKGsVBUk9AtZ1mviX3QIsBXd_G2x_fXX1Aok6kVCqMSOeS_NgU8-26pNEJrk-f23H5N0hEBrI0mcJTL341yL1qChG0fy0yChKiBejZTOvvzjwa6ZWnvvKAse_qvIahU"
-
-    # from https://developer.spotify.com/console/post-playlist-tracks/
-    add_items_to_playlist_token: str = \
-        "BQAt-i_TEfAVUXjtwmvm1Oid7VAk6K2LdjSOGL0wHxrtYLEgiyjTW23pr9TH02p32WVjv9EBWAekiwhHKnVslGAfmofu3OnX_lnZdjT2SPvYrfc3gIlXbL_JUa4SXzJNYM3fXbCo-fpk91ZYTz4ClV_vGl2AFGRWsme5FUUKciHbQLWexEBcBr55yeeSx3ckJcS2xZUZ_OBq4z8Efw8"
-
-    merge_dohmaen_parts(get_playlist_items_token, create_playlist_token, add_items_to_playlist_token)
+    merge_playlist_parts(config.GET_PLAYLIST_ITEMS_TOKEN,
+                         config.CREATE_PLAYLIST_TOKEN,
+                         config.ADD_ITEMS_TO_PLAYLIST_TOKEN,
+                         config.PLAYLIST_1,
+                         config.PLAYLIST_2,
+                         number_of_songs=config.NUMBER_OF_SONGS)
 
 
 if __name__ == '__main__':
