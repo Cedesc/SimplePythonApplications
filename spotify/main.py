@@ -108,10 +108,6 @@ def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: s
     return added_elements
 
 
-def refresh_tokens():
-    pass
-
-
 def main():
 
     merge_playlist_parts(config.GET_PLAYLIST_ITEMS_TOKEN,
