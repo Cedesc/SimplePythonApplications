@@ -22,29 +22,32 @@ def getTokenFromURL(url: str) -> str:
     try:
 
         # Accept Cookies
+        time.sleep(1)
         getCookieAcceptButton = WebDriverWait(driver, timeout=10).until(
             EC.presence_of_element_located((By.ID, "onetrust-accept-btn-handler"))
         )
         getCookieAcceptButton.click()
 
 
-        print("HHHHHHHHHHHHHHHHH")
         # Login
-        getTokenButton = WebDriverWait(driver, timeout=10000000).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "btn btn-green"))
+        time.sleep(1)
+        getTokenButton = WebDriverWait(driver, timeout=10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
         )
-        print("AAAAAAAAAAAAAAAAAAA")
         getTokenButton.click()
 
+        time.sleep(1)
         requestTokenButton = WebDriverWait(driver, timeout=10).until(
             EC.presence_of_element_located((By.ID, "oauthRequestToken"))
         )
         requestTokenButton.click()
 
+
+        # Enter Credentials
         usernameField = WebDriverWait(driver, timeout=10).until(
             EC.presence_of_element_located((By.ID, "login-username"))
         )
-        time.sleep(10)
+        time.sleep(100)
 
 
 
@@ -65,7 +68,5 @@ def getTokenFromURL(url: str) -> str:
 
 if __name__ == '__main__':
     print(getTokenFromURL("https://developer.spotify.com/console/get-playlist-tracks/"))
-
-
 
 
