@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 
-PATH = 'chromedriver.exe'
+DRIVER_PATH = 'chromedriver.exe'
 URL1 = 'https://developer.spotify.com/console/get-playlist-tracks/'
 URL2 = 'https://developer.spotify.com/console/post-playlists/'
 URL3 = 'https://developer.spotify.com/console/post-playlist-tracks/'
@@ -19,22 +19,30 @@ def getCredentials() -> (str, str):
     return username, pw
 
 
+def saveTokens(token1: str, token2: str, token3: str):
+    with open('../tokens.txt', "w") as file:
+        file.write(f"{token1}\n"
+                   f"{token2}\n"
+                   f"{token3}\n")
+
+
 class SpotifyWebCrawler:
 
-    driver = webdriver.Chrome(PATH)
-    username, pw = getCredentials()
+    def __init__(self):
+        self.driver = webdriver.Chrome(DRIVER_PATH)
+        self.username, self.pw = getCredentials()
 
 
     def getTokens(self) -> (str, str, str):
 
         # Login
-        self.login()
+        self.acceptCookies()
 
         try:
             # Visit each of the three URLs and extract the token
-            result = (self.getTokenFromURL(URL1),
-                      self.getTokenFromURL(URL2),
-                      self.getTokenFromURL(URL3))
+            result = (self.getTokenFromURL(URL1, login_required=True),
+                      self.getTokenFromURL(URL2, login_required=False),
+                      self.getTokenFromURL(URL3, login_required=False))
 
         finally:
             # Quit the browser
@@ -43,79 +51,69 @@ class SpotifyWebCrawler:
         return result
 
 
-    def login(self):
+    def acceptCookies(self):
+
         self.driver.get(URL1)
 
-        try:
-            # Accept Cookies
-            time.sleep(1)
-            getCookieAcceptButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "onetrust-accept-btn-handler"))
-            )
-            getCookieAcceptButton.click()
-
-            # Navigate to Login
-            time.sleep(1)
-            getTokenButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
-            )
-            getTokenButton.click()
-
-            time.sleep(1)
-            requestTokenButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "oauthRequestToken"))
-            )
-            requestTokenButton.click()
-
-            # Enter Credentials
-            usernameField = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "login-username"))
-            )
-            usernameField.send_keys(self.username)
-            passwordField = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "login-password"))
-            )
-            passwordField.send_keys(self.pw)
-
-            # TODO every time credentials (???)
-
-            # Login
-            loginButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "login-button"))
-            )
-            loginButton.click()
-
-        finally:
-            return
+        # Accept Cookies
+        time.sleep(1)
+        getCookieAcceptButton = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "onetrust-accept-btn-handler"))
+        )
+        getCookieAcceptButton.click()
 
 
-    def getTokenFromURL(self, url: str) -> str:
-        result = "NULL"
+    def login(self):
+
+        # Enter Credentials
+        usernameField = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "login-username"))
+        )
+        usernameField.clear()
+        usernameField.send_keys(self.username)
+        passwordField = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "login-password"))
+        )
+        passwordField.send_keys(self.pw)
+
+        # Login
+        loginButton = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "login-button"))
+        )
+        loginButton.click()
+
+
+
+    def getTokenFromURL(self, url: str, login_required: bool = False) -> str:
+
         self.driver.get(url)
 
-        try:
-            # Generate Token
-            time.sleep(1)
-            getTokenButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
-            )
-            getTokenButton.click()
+        # Generate Token
+        time.sleep(1)
+        getTokenButton = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
+        )
+        getTokenButton.click()
 
-            time.sleep(1)
-            requestTokenButton = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "oauthRequestToken"))
-            )
-            requestTokenButton.click()
+        time.sleep(1)
+        requestTokenButton = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "oauthRequestToken"))
+        )
+        requestTokenButton.click()
 
-            # Read Token
-            time.sleep(1)
-            textField = WebDriverWait(self.driver, timeout=10).until(
-                ec.presence_of_element_located((By.ID, "oauth-input"))
-            )
-            result = textField.get_attribute("value")
+        # Login
+        if login_required:
+            self.login()
 
-        finally:
-            return result
+        # Read Token
+        time.sleep(1)
+        textField = WebDriverWait(self.driver, timeout=10).until(
+            ec.presence_of_element_located((By.ID, "oauth-input"))
+        )
+        result = textField.get_attribute("value")
+
+
+        return result
 
 
     def quitBrowser(self):
@@ -123,81 +121,10 @@ class SpotifyWebCrawler:
 
 
 
-
-# def getTokenFromURL(url: str) -> str:
-#     """Returns the OAuth Token of the given "Spotify for developer" link."""
-#
-#     result: str = ""
-#
-#     driver = webdriver.Chrome(PATH)
-#     driver.get(url)
-#
-#
-#     try:
-#
-#         # Accept Cookies
-#         time.sleep(1)
-#         getCookieAcceptButton = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "onetrust-accept-btn-handler"))
-#         )
-#         getCookieAcceptButton.click()
-#
-#
-#         # Login
-#         time.sleep(1)
-#         getTokenButton = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
-#         )
-#         getTokenButton.click()
-#
-#         time.sleep(1)
-#         requestTokenButton = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "oauthRequestToken"))
-#         )
-#         requestTokenButton.click()
-#
-#
-#         # Enter Credentials
-#         username, pw = getCredentials()
-#         usernameField = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "login-username"))
-#         )
-#         usernameField.send_keys(username)
-#         passwordField = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "login-password"))
-#         )
-#         passwordField.send_keys(pw)
-#
-#         loginButton = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "login-button"))
-#         )
-#         loginButton.click()
-#
-#
-#         # time.sleep(100)
-#
-#
-#
-#
-#         time.sleep(1)
-#         textField = WebDriverWait(driver, timeout=10).until(
-#             ec.presence_of_element_located((By.ID, "oauth-input"))
-#         )
-#         result = textField.get_attribute("value")
-#
-#         print("Hier:  ", result)
-#
-#
-#     finally:
-#         driver.quit()
-#
-#     return result
-
-
-
-
 if __name__ == '__main__':
-    # print(getTokenFromURL("https://developer.spotify.com/console/get-playlist-tracks/"))
-    print(SpotifyWebCrawler().getTokens())
-
-
+    a, b, c = SpotifyWebCrawler().getTokens()
+    # print(SpotifyWebCrawler().getTokens())
+    saveTokens(a, b, c)
+    print(a)
+    print(b)
+    print(c)
