@@ -1,8 +1,6 @@
 from random import shuffle
 from datetime import date
 import requests
-import config
-
 
 
 def create_playlist(access_token: str, name: str, public: bool = True, description: str = ""):
@@ -106,17 +104,3 @@ def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: s
     print(f"Added elements: {added_elements}")
 
     return added_elements
-
-
-def main():
-
-    merge_playlist_parts(config.GET_PLAYLIST_ITEMS_TOKEN,
-                         config.CREATE_PLAYLIST_TOKEN,
-                         config.ADD_ITEMS_TO_PLAYLIST_TOKEN,
-                         config.PLAYLIST_1,
-                         config.PLAYLIST_2,
-                         number_of_songs=config.NUMBER_OF_SONGS)
-
-
-if __name__ == '__main__':
-    main()
