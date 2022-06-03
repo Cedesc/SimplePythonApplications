@@ -4,7 +4,10 @@ import pandas as pd
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
+
+# https://www.youtube.com/watch?v=z75pzE2UVK4&lc=UgzKEbgOFbLQt8RbUEh4AaABAg.9blt5Y2h7a39blxh-3Cymh
+# https://www.youtube.com/watch?v=gRLHr664tXA
 
 
 
@@ -34,6 +37,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # driver.quit()
 
 
+
 def fun1():
     PATH = 'chromedriver.exe'
     driver = webdriver.Chrome(PATH)
@@ -50,7 +54,7 @@ def fun1():
     # wait until the site is fully loaded
     try:
         main = WebDriverWait(driver, timeout=10).until(
-            EC.presence_of_element_located((By.ID, "main"))
+            ec.presence_of_element_located((By.ID, "main"))
         )
         # print(main.text)
 
@@ -90,11 +94,11 @@ def fun2():
 
     try:
         element = WebDriverWait(driver, timeout=10).until(
-            EC.presence_of_element_located((By.LINK_TEXT, "Beginner Python Tutorials"))
+            ec.presence_of_element_located((By.LINK_TEXT, "Beginner Python Tutorials"))
         )
         element.click()
         element = WebDriverWait(driver, timeout=10).until(
-            EC.presence_of_element_located((By.ID, "sow-button-19310003"))
+            ec.presence_of_element_located((By.ID, "sow-button-19310003"))
         )
         element.click()
     finally:
