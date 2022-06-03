@@ -5,6 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 
+# Waited time before the next step is executed.
+# Minimum: 0.5s   Recommended: 1s
+TIME_WAIT = 0.5
 DRIVER_PATH = 'chromedriver.exe'
 URL1 = 'https://developer.spotify.com/console/get-playlist-tracks/'
 URL2 = 'https://developer.spotify.com/console/post-playlists/'
@@ -32,7 +35,6 @@ class SpotifyWebCrawler:
         self.driver = webdriver.Chrome(DRIVER_PATH)
         self.username, self.pw = getCredentials()
 
-
     def getTokens(self) -> (str, str, str):
 
         # Login
@@ -50,18 +52,16 @@ class SpotifyWebCrawler:
 
         return result
 
-
     def acceptCookies(self):
 
         self.driver.get(URL1)
 
         # Accept Cookies
-        time.sleep(1)
+        time.sleep(TIME_WAIT)
         getCookieAcceptButton = WebDriverWait(self.driver, timeout=10).until(
             ec.presence_of_element_located((By.ID, "onetrust-accept-btn-handler"))
         )
         getCookieAcceptButton.click()
-
 
     def login(self):
 
@@ -82,20 +82,18 @@ class SpotifyWebCrawler:
         )
         loginButton.click()
 
-
-
     def getTokenFromURL(self, url: str, login_required: bool = False) -> str:
 
         self.driver.get(url)
 
         # Generate Token
-        time.sleep(1)
+        time.sleep(TIME_WAIT)
         getTokenButton = WebDriverWait(self.driver, timeout=10).until(
             ec.presence_of_element_located((By.CLASS_NAME, "input-group-btn"))
         )
         getTokenButton.click()
 
-        time.sleep(1)
+        time.sleep(TIME_WAIT)
         requestTokenButton = WebDriverWait(self.driver, timeout=10).until(
             ec.presence_of_element_located((By.ID, "oauthRequestToken"))
         )
@@ -106,15 +104,16 @@ class SpotifyWebCrawler:
             self.login()
 
         # Read Token
-        time.sleep(1)
+        time.sleep(TIME_WAIT)
         textField = WebDriverWait(self.driver, timeout=10).until(
             ec.presence_of_element_located((By.ID, "oauth-input"))
         )
         result = textField.get_attribute("value")
 
-
         return result
 
+    def minimizeWindow(self):
+        self.driver.minimize_window()
 
     def quitBrowser(self):
         self.driver.quit()
@@ -123,8 +122,7 @@ class SpotifyWebCrawler:
 
 if __name__ == '__main__':
     a, b, c = SpotifyWebCrawler().getTokens()
-    # print(SpotifyWebCrawler().getTokens())
     saveTokens(a, b, c)
-    print(a)
-    print(b)
-    print(c)
+    print(f"1. Token: {a}")
+    print(f"2. Token: {b}")
+    print(f"3. Token: {c}")
