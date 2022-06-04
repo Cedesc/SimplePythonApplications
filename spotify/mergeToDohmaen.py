@@ -24,8 +24,8 @@ def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: s
     print(f"Get songs - part 2: {songs_part_1}")
 
     # convert to the ids
-    ids_part_1: list[str] = sAPI.extract_ids(songs_part_1)
-    ids_part_2: list[str] = sAPI.extract_ids(songs_part_2)
+    ids_part_1: list[str] = sAPI.extract_ids_get_playlist_items(songs_part_1)
+    ids_part_2: list[str] = sAPI.extract_ids_get_playlist_items(songs_part_2)
 
     # shuffle lists
     shuffle(ids_part_1)

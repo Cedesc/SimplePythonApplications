@@ -1,9 +1,12 @@
 import requests
 
 
-def get_favorite_songs(access_token: str):
+def get_top_songs(access_token: str, time_range: str = 'short_term', limit: int = 50):
+    """The 'top songs' aren't the favored songs, but the top songs of this website:
+    https://www.statsforspotify.com/track/top?timeRange=short_term
+    Possible time_ranges are 'short_term', 'medium_term' and 'long_term'."""
     response = requests.get(
-        f"https://api.spotify.com/v1/me/top/tracks",
+        f"https://api.spotify.com/v1/me/top/tracks?time_range={time_range}&limit={limit}",
         headers={
             "Authorization": f"Bearer {access_token}"
         }
@@ -53,7 +56,7 @@ def add_items_to_playlist(access_token: str, playlist_id: str, uris: list[str]):
     return response.json()
 
 
-def extract_ids(response: dict) -> list[str]:
+def extract_ids_get_playlist_items(response: dict) -> list[str]:
 
     result: list[str] = []
 
@@ -61,6 +64,18 @@ def extract_ids(response: dict) -> list[str]:
 
     for i in range(len(list_of_songs)):
         result.append(list_of_songs[i]['track']['id'])
+
+    return result
+
+
+def extract_ids_get_top_tracks(response: dict) -> list[str]:
+
+    result: list[str] = []
+
+    list_of_songs: list = response['items']
+
+    for i in range(len(list_of_songs)):
+        result.append(list_of_songs[i]['id'])
 
     return result
 
