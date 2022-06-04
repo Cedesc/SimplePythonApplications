@@ -1,6 +1,17 @@
 import requests
 
 
+def get_favorite_songs(access_token: str):
+    response = requests.get(
+        f"https://api.spotify.com/v1/me/top/tracks",
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+    )
+
+    return response.json()
+
+
 def get_playlist_items(access_token: str, playlist_id: str, limit: int = 25):
     response = requests.get(
         f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?fields=items(track(id))&limit={limit}",
