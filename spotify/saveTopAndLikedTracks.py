@@ -53,12 +53,3 @@ def createTopTracksSave(get_playlist_items_token: str, create_playlist_token: st
     print(f"Added elements")
 
     return added_elements
-
-
-
-if __name__ == '__main__':
-
-    t1 = 'BQBvIhWbsi3RybMyyFkZKY3cbZBHrUqN19As1pDqxkZclf5Sh8CSpcj9oqQQhN967p5i1gu1vGFZ-6lPKciOo68anTYnFk9Y3l2t3GfV1xbPGrj4Ye7mxgFep9pN1vS_GP6J__CyVw8ft00E2LD61IYmJs9VJK18StSeNPTuaYr6N9bIKdDSLIbBdWC8Mz9zlLxJY3kfboUpRBS-cKZTD7Hx'
-    t2 = 'BQACiUU0o8H4X_sJ6ilgm-55nCFgbDTkSFk4iBf_13cKOLvBxYt9vIsFfgPK6-PClSxQsJaO5PBhWeNGTbllUjFFAjkfR2wxZsoyaH-Y0sKbv3evQNYPwjX3vdCLyUOOc0GTu1AAr2lesE7CylQDDL_24pTgfNBsOBJng55SkP_QzuCrEHYifU1FXA0B0Ys-chzlGCqr0fFKFoBbpsiCQyX7'
-    t3 = 'BQDImxaRXAAEVEqnSTEld4WkKcTNBJDj5kea7JfkuQZ5ZZKf3ApGHZZvBdu5Fd1W2sBOaiNiK96J9kO6dJzHScPl4MUIzbSmCribSsrtiG1NUfIzEu3TC9psXgJKbudv80u8DcHZN-aeuJWvE3PjZ-1nXhWeS_Ujn2GSm47JFicQd-wv_99a1EVtCivPbmSJ8ENZJkqDcNWGevAY5boNi8QT'
-    createTopTracksSave(t1, t2, t3)
