@@ -9,31 +9,28 @@ from selenium.webdriver.support import expected_conditions as ec
 # Minimum: 0.5s   Recommended: 1s
 TIME_WAIT = 0.5
 DRIVER_PATH = 'chromedriver.exe'
+CREDENTIALS_PATH = 'credentials.txt'
 URL1 = 'https://developer.spotify.com/console/get-playlist-tracks/'
 URL2 = 'https://developer.spotify.com/console/post-playlists/'
 URL3 = 'https://developer.spotify.com/console/post-playlist-tracks/'
 
 
-def getCredentials() -> (str, str):
-    with open('credentials.txt', "r") as file:
+
+def getCredentials(credentials_path: str) -> (str, str):
+    with open(credentials_path, "r") as file:
         lines = file.read().split("\n")
         username: str = lines[0]
         pw: str = lines[1]
     return username, pw
 
 
-def saveTokens(token1: str, token2: str, token3: str):
-    with open('../tokens.txt', "w") as file:
-        file.write(f"{token1}\n"
-                   f"{token2}\n"
-                   f"{token3}\n")
-
 
 class SpotifyWebCrawler:
 
-    def __init__(self):
-        self.driver = webdriver.Chrome(DRIVER_PATH)
-        self.username, self.pw = getCredentials()
+    def __init__(self, driver_path: str = DRIVER_PATH, credentials_path: str = CREDENTIALS_PATH):
+        self.driver = webdriver.Chrome(executable_path=driver_path)
+        self.username, self.pw = getCredentials(credentials_path=credentials_path)
+
 
     def getTokens(self) -> (str, str, str):
 
@@ -117,12 +114,3 @@ class SpotifyWebCrawler:
 
     def quitBrowser(self):
         self.driver.quit()
-
-
-
-if __name__ == '__main__':
-    a, b, c = SpotifyWebCrawler().getTokens()
-    saveTokens(a, b, c)
-    print(f"1. Token: {a}")
-    print(f"2. Token: {b}")
-    print(f"3. Token: {c}")
