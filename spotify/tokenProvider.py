@@ -21,15 +21,15 @@ class TokenProvider:
             = self.web_crawler.getTokens()
         self.saveTokensInFile()
 
+    def saveTokensInFile(self):
+        with open('../tokens.txt', "w") as file:
+            file.write(f"{self.get_playlist_items_token}\n"
+                       f"{self.create_playlist_token}\n"
+                       f"{self.add_items_to_playlist_token}\n")
+
     def readTokensFromFile(self) -> (str, str, str):
         with open('tokens.txt', "r") as file:
             lines = file.read().split("\n")
             self.get_playlist_items_token = lines[0]
             self.create_playlist_token = lines[1]
             self.add_items_to_playlist_token = lines[2]
-
-    def saveTokensInFile(self):
-        with open('../tokens.txt', "w") as file:
-            file.write(f"{self.get_playlist_items_token}\n"
-                       f"{self.create_playlist_token}\n"
-                       f"{self.add_items_to_playlist_token}\n")
