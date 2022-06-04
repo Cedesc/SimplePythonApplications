@@ -15,6 +15,7 @@ NUMBER_OF_SONGS = 25
 if __name__ == '__main__':
 
     tp = TokenProvider()
+    # tp.readTokensFromFile()
     tp.generateTokens()
 
     merge_playlist_parts(tp.get_playlist_items_token,
