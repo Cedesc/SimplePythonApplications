@@ -19,6 +19,7 @@ class TokenProvider:
     def generateTokens(self):
         self.get_playlist_items_token, self.create_playlist_token, self.add_items_to_playlist_token \
             = self.web_crawler.getTokens()
+        self.saveTokensInFile()
 
     def readTokensFromFile(self) -> (str, str, str):
         with open('tokens.txt', "r") as file:
