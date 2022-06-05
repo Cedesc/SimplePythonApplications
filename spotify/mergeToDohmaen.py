@@ -14,13 +14,13 @@ def arrange_elements(first_list: list[str], second_list: list[str]) -> list[str]
     return [first_list[i // 2] if i % 2 == 0 else second_list[i // 2] for i in range(length * 2)]
 
 
-def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: str, add_items_to_playlist_token: str,
+def merge_playlist_parts(access_token: str,
                          playlist_part_1: str, playlist_part_2: str, number_of_songs: int = 25):
 
     # get songs of the playlists
-    songs_part_1 = sAPI.get_playlist_items(get_playlist_items_token, playlist_part_1, limit=number_of_songs)
+    songs_part_1 = sAPI.get_playlist_items(access_token, playlist_part_1, limit=number_of_songs)
     print(f"Get songs - part 1: {songs_part_1}")
-    songs_part_2 = sAPI.get_playlist_items(get_playlist_items_token, playlist_part_2, limit=number_of_songs)
+    songs_part_2 = sAPI.get_playlist_items(access_token, playlist_part_2, limit=number_of_songs)
     print(f"Get songs - part 2: {songs_part_1}")
 
     # convert to the ids
@@ -37,13 +37,13 @@ def merge_playlist_parts(get_playlist_items_token: str, create_playlist_token: s
 
     # create new playlist
     playlist_name: str = f"Dohmän {date.today().strftime('%d.%m.')}"
-    playlist = sAPI.create_playlist(create_playlist_token, playlist_name, public=True, description="")
+    playlist = sAPI.create_playlist(access_token, playlist_name, public=True, description="")
     print(f"Create playlist: {playlist}")
     # save playlist id
     playlist_id = playlist['id']
 
     # fill playlist with songs
-    added_elements = sAPI.add_items_to_playlist(add_items_to_playlist_token, playlist_id, song_uris)
+    added_elements = sAPI.add_items_to_playlist(access_token, playlist_id, song_uris)
     print(f"Added elements: {added_elements}")
 
     return added_elements

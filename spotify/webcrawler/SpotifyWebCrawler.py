@@ -32,16 +32,13 @@ class SpotifyWebCrawler:
         self.username, self.pw = getCredentials(credentials_path=credentials_path)
 
 
-    def getTokens(self) -> (str, str, str):
-
+    def getAccessToken(self) -> str:
         # Login
         self.acceptCookies()
 
         try:
-            # Visit each of the three URLs and extract the token
-            result = (self.getTokenFromURL(URL1, login_required=True),
-                      self.getTokenFromURL(URL2, login_required=False),
-                      self.getTokenFromURL(URL3, login_required=False))
+            # Visit the URL and extract the token
+            result = self.getTokenFromURL(URL1, login_required=True)
 
         finally:
             # Quit the browser
@@ -114,3 +111,21 @@ class SpotifyWebCrawler:
 
     def quitBrowser(self):
         self.driver.quit()
+
+    def getTokensOldVersion(self) -> (str, str, str):
+        """OUTDATED!!! Because one need only one token!"""
+
+        # Login
+        self.acceptCookies()
+
+        try:
+            # Visit each of the three URLs and extract the token
+            result = (self.getTokenFromURL(URL1, login_required=True),
+                      self.getTokenFromURL(URL2, login_required=False),
+                      self.getTokenFromURL(URL3, login_required=False))
+
+        finally:
+            # Quit the browser
+            self.quitBrowser()
+
+        return result
