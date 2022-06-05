@@ -59,7 +59,8 @@ def create_playlist(access_token: str, name: str, public: bool = True, descripti
 
 
 def add_items_to_playlist(access_token: str, playlist_id: str, uris: list[str]):
-    """https://developer.spotify.com/console/post-playlist-tracks/"""
+    """https://developer.spotify.com/console/post-playlist-tracks/
+    The maximum number of items that can be added at once is 100."""
     response = requests.post(
         f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks",
         headers={
