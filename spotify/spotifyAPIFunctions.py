@@ -16,6 +16,19 @@ def get_top_songs(access_token: str, time_range: str = 'short_term', limit: int 
     return response.json()
 
 
+def get_liked_songs(access_token: str, limit: int = 50, offset: int = 0):
+    """https://developer.spotify.com/console/get-current-user-saved-tracks/
+    The 'liked songs' or 'saved songs' are the favored songs."""
+    response = requests.get(
+        f"https://api.spotify.com/v1/me/tracks?limit={limit}&offset={offset}",
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+    )
+
+    return response.json()
+
+
 def get_playlist_items(access_token: str, playlist_id: str, limit: int = 25):
     """https://developer.spotify.com/console/get-playlist-tracks/"""
     response = requests.get(
@@ -86,3 +99,9 @@ def extract_ids_get_top_tracks(response: dict) -> list[str]:
 
 def convert_song_ids_to_uris(ids: list[str]) -> list[str]:
     return [f"spotify:track:{song_id}" for song_id in ids]
+
+
+def get_total_track_amount_of_liked_tracks(response: dict) -> int:
+    """Currently the result is lower than the actual amount since I have liked songs that aren't in Spotify,
+    like 'Motiva' by 'Bladesa'."""
+    return response['total']
