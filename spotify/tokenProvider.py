@@ -22,7 +22,7 @@ class TokenProvider:
         self.saveTokensInFile()
 
     def saveTokensInFile(self):
-        with open('../tokens.txt', "w") as file:
+        with open('tokens.txt', "w") as file:
             file.write(f"{self.get_playlist_items_token}\n"
                        f"{self.create_playlist_token}\n"
                        f"{self.add_items_to_playlist_token}\n")
