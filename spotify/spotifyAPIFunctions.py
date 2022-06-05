@@ -2,7 +2,8 @@ import requests
 
 
 def get_top_songs(access_token: str, time_range: str = 'short_term', limit: int = 50):
-    """The 'top songs' aren't the favored songs, but the top songs of this website:
+    """https://developer.spotify.com/console/get-current-user-top-artists-and-tracks/
+    The 'top songs' aren't the favored songs, but the top songs of this website:
     https://www.statsforspotify.com/track/top?timeRange=short_term
     Possible time_ranges are 'short_term', 'medium_term' and 'long_term'."""
     response = requests.get(
@@ -16,6 +17,7 @@ def get_top_songs(access_token: str, time_range: str = 'short_term', limit: int 
 
 
 def get_playlist_items(access_token: str, playlist_id: str, limit: int = 25):
+    """https://developer.spotify.com/console/get-playlist-tracks/"""
     response = requests.get(
         f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?fields=items(track(id))&limit={limit}",
         headers={
@@ -27,6 +29,7 @@ def get_playlist_items(access_token: str, playlist_id: str, limit: int = 25):
 
 
 def create_playlist(access_token: str, name: str, public: bool = True, description: str = ""):
+    """https://developer.spotify.com/console/post-playlists/"""
     response = requests.post(
         'https://api.spotify.com/v1/users/cedesc3/playlists',
         headers={
@@ -43,6 +46,7 @@ def create_playlist(access_token: str, name: str, public: bool = True, descripti
 
 
 def add_items_to_playlist(access_token: str, playlist_id: str, uris: list[str]):
+    """https://developer.spotify.com/console/post-playlist-tracks/"""
     response = requests.post(
         f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks",
         headers={
