@@ -13,6 +13,7 @@ CREDENTIALS_PATH = 'credentials.txt'
 URL1 = 'https://developer.spotify.com/console/get-playlist-tracks/'
 URL2 = 'https://developer.spotify.com/console/post-playlists/'
 URL3 = 'https://developer.spotify.com/console/post-playlist-tracks/'
+SELECTED_URL = URL2
 
 
 
@@ -34,11 +35,11 @@ class SpotifyWebCrawler:
 
     def getAccessToken(self) -> str:
         # Login
-        self.acceptCookies()
+        self.acceptCookies(SELECTED_URL)
 
         try:
             # Visit the URL and extract the token
-            result = self.getTokenFromURL(URL1, login_required=True)
+            result = self.getTokenFromURL(SELECTED_URL, login_required=True)
 
         finally:
             # Quit the browser
@@ -46,9 +47,9 @@ class SpotifyWebCrawler:
 
         return result
 
-    def acceptCookies(self):
+    def acceptCookies(self, url: str):
 
-        self.driver.get(URL1)
+        self.driver.get(url)
 
         # Accept Cookies
         time.sleep(TIME_WAIT)
@@ -116,7 +117,7 @@ class SpotifyWebCrawler:
         """OUTDATED!!! Because one need only one token!"""
 
         # Login
-        self.acceptCookies()
+        self.acceptCookies(URL1)
 
         try:
             # Visit each of the three URLs and extract the token
