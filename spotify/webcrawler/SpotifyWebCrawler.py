@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as ec
 
 # Waited time before the next step is executed.
 # Minimum: 0.5s   Recommended: 1s
-TIME_WAIT = 0.5
+TIME_WAIT = 1
 DRIVER_PATH = 'chromedriver.exe'
 CREDENTIALS_PATH = 'credentials.txt'
 URL1 = 'https://developer.spotify.com/console/get-playlist-tracks/'
@@ -88,6 +88,17 @@ class SpotifyWebCrawler:
         )
         getTokenButton.click()
 
+        # Scope Selection
+        time.sleep(TIME_WAIT)
+        publicScopeButton = WebDriverWait(self.driver, timeout=10).until(
+            # Very rude style, it works only because the public modify scope is the first element with the
+            # "control-indicator". It would be better to find the element specifically because with this you can't
+            # access the private modify or any other scope.
+            ec.presence_of_element_located((By.CLASS_NAME, "control-indicator"))
+        )
+        publicScopeButton.click()
+
+        # Request Token after Scope Selection
         time.sleep(TIME_WAIT)
         requestTokenButton = WebDriverWait(self.driver, timeout=10).until(
             ec.presence_of_element_located((By.ID, "oauthRequestToken"))
