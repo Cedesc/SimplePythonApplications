@@ -2,6 +2,7 @@ from saveTopAndLikedTracks import createTopTracksSave, createLikedTracksSave
 from tokenProvider import TokenProvider
 
 # https://developer.spotify.com/console/post-playlists/
+# https://www.statsforspotify.com/track/top
 
 # actually it isn't working, because of the tokens
 
