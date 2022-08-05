@@ -1,6 +1,10 @@
 from saveTopAndLikedTracks import createTopTracksSave, createLikedTracksSave
 from tokenProvider import TokenProvider
 
+# https://developer.spotify.com/console/post-playlists/
+
+# actually it isn't working, because of the tokens
+
 # Settings for saving the top tracks
 TIME_RANGE = 'short_term'   # 'short_term' = 4 weeks , 'medium_term' = 6 months , 'long_term' = all time
 NUMBER_OF_SONGS_TOP_TRACKS = 50
