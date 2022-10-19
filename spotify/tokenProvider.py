@@ -8,11 +8,14 @@ class TokenProvider:
 
     def __init__(self):
         self.access_token = ""
+        self.web_crawler = None
+
+    def initializeWebCrawler(self):
         self.web_crawler = SpotifyWebCrawler(driver_path='webcrawler/chromedriver.exe',
                                              credentials_path='webcrawler/credentials.txt')
 
-
     def generateAccessToken(self):
+        self.initializeWebCrawler()
         self.access_token = self.web_crawler.getAccessToken()
         self.saveTokenInTXTFile()
 
