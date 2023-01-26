@@ -1,0 +1,60 @@
+from tkinter import Tk, StringVar, Entry
+from pyperclip import copy
+
+
+with open('dataForGetMaster.txt') as f:
+    DATA: bytes = bytes(f.readlines()[0], "UTF-8")
+
+def main():
+
+    # define a function to show the entered password
+    def decrypt() -> None:
+
+        # get the input
+        pw = entry_content.get()
+        # cast to bytes
+        pw_bytes = bytes(pw, "UTF-8")
+
+        # if input is empty, clear clipboard and destroy the window
+        if pw_bytes == b'':
+            copy('')
+            win.destroy()
+            return
+
+        else:
+            # stretch the input minimum to the length of the data
+            while len(pw_bytes) < len(DATA):
+                pw_bytes *= 2
+
+            # decrypt
+            result: str = bytes(a ^ b for (a, b) in zip(pw_bytes, DATA)).decode('utf-8')
+            # copy to clipboard
+            copy(result)
+            # clear content of entry
+            entry_content.set("")
+
+
+
+    # create an instance of tkinter window
+    win = Tk()
+
+    # set the size of the window
+    win.geometry("300x100")
+
+    # add an entry widget for accepting user password
+    entry_content = StringVar()
+    entry = Entry(win, width=40, textvariable=entry_content, show="*")
+    entry.pack(pady=10)
+    # autofocus on entry
+    entry.focus()
+
+    # bind "Return" to the function
+    win.bind("<Return>", lambda _: decrypt())
+    # bind "Escape" to destroying the window
+    win.bind("<Escape>", lambda _: win.destroy())
+
+    win.mainloop()
+
+
+if __name__ == '__main__':
+    main()
