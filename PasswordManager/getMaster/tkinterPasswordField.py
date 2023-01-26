@@ -2,10 +2,14 @@ from tkinter import Tk, StringVar, Entry
 from pyperclip import copy
 
 
-with open('dataForGetMaster.txt') as f:
-    DATA: bytes = bytes(f.readlines()[0], "UTF-8")
-
 def main():
+
+    # clear the entry content and clipboard, destroy the whole window
+    def clear_and_destroy() -> None:
+        entry_content.set("")
+        copy('')
+        win.destroy()
+
 
     # define a function to show the entered password
     def decrypt() -> None:
@@ -17,23 +21,23 @@ def main():
 
         # if input is empty, clear clipboard and destroy the window
         if pw_bytes == b'':
-            copy('')
-            win.destroy()
+            clear_and_destroy()
             return
-
         else:
             # stretch the input minimum to the length of the data
-            while len(pw_bytes) < len(DATA):
+            while len(pw_bytes) < len(data):
                 pw_bytes *= 2
 
             # decrypt
-            result: str = bytes(a ^ b for (a, b) in zip(pw_bytes, DATA)).decode('utf-8')
+            result: str = bytes(a ^ b for (a, b) in zip(pw_bytes, data)).decode('utf-8')
             # copy to clipboard
             copy(result)
             # clear content of entry
             entry_content.set("")
 
-
+    # read and save the data
+    with open('dataForGetMaster.txt') as f:
+        data: bytes = bytes(f.readlines()[0], "UTF-8")
 
     # create an instance of tkinter window
     win = Tk()
@@ -51,7 +55,10 @@ def main():
     # bind "Return" to the function
     win.bind("<Return>", lambda _: decrypt())
     # bind "Escape" to destroying the window
-    win.bind("<Escape>", lambda _: win.destroy())
+    win.bind("<Escape>", lambda _: clear_and_destroy())
+
+    # "overwrite" the red x button for closing the window
+    win.protocol("WM_DELETE_WINDOW", clear_and_destroy)
 
     win.mainloop()
 
