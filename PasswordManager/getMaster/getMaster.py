@@ -10,7 +10,6 @@ def main():
         copy('')
         win.destroy()
 
-
     # define a function to show the entered password
     def decrypt() -> None:
 
