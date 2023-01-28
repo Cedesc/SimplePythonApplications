@@ -2,6 +2,20 @@ from tkinter import Tk, StringVar, Entry
 from pyperclip import copy
 
 
+def get_data() -> bytes:
+
+    data = b'\x18\x11hwA\x0b\x17[\x0cC|b\x02\x17\x0fgQRwk'
+
+    # # read and save the data
+    # with open('dataForGetMaster.txt') as f:
+    #     data: bytes = bytes(f.readlines()[0], "UTF-8")
+
+    return data
+
+
+DATA: bytes = get_data()
+
+
 def main():
 
     # clear the entry content and clipboard, destroy the whole window
@@ -24,19 +38,15 @@ def main():
             return
         else:
             # stretch the input minimum to the length of the data
-            while len(pw_bytes) < len(data):
+            while len(pw_bytes) < len(DATA):
                 pw_bytes *= 2
 
             # decrypt
-            result: str = bytes(a ^ b for (a, b) in zip(pw_bytes, data)).decode('utf-8')
+            result: str = bytes(a ^ b for (a, b) in zip(pw_bytes, DATA)).decode('utf-8')
             # copy to clipboard
             copy(result)
             # clear content of entry
             entry_content.set("")
-
-    # read and save the data
-    with open('dataForGetMaster.txt') as f:
-        data: bytes = bytes(f.readlines()[0], "UTF-8")
 
     # create an instance of tkinter window
     win = Tk()
