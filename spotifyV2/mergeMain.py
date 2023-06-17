@@ -1,4 +1,4 @@
-from logic.mergePlaylists import create_merged_playlist
+from spotifyV2.logic.merging.mergePlaylists import create_merged_playlist
 from spotipyRequests.SpotipyRequests import SpotipyRequests
 
 # Docu https://developer.spotify.com/documentation/web-api
