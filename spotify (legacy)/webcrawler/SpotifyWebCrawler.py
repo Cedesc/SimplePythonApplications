@@ -29,7 +29,9 @@ def getCredentials(credentials_path: str) -> (str, str):
 class SpotifyWebCrawler:
 
     def __init__(self, driver_path: str = DRIVER_PATH, credentials_path: str = CREDENTIALS_PATH):
-        self.driver = webdriver.Chrome(executable_path=driver_path)
+        # self.driver = webdriver.Chrome(executable_path=driver_path)
+        # self.driver = webdriver.Chrome(driver_path)
+        self.driver = webdriver.Chrome()
         self.username, self.pw = getCredentials(credentials_path=credentials_path)
 
 
