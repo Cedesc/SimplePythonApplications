@@ -50,25 +50,25 @@ def _arrangeElementsForThreePlaylists(list1: list[str], list2: list[str], list3:
             for i in range(length * 3)]
 
 
-def createMergedPlaylist(apiReq, playlist1: str, playlist2: str, playlist3: str = None,
+def createMergedPlaylist(sp_req, playlist1: str, playlist2: str, playlist3: str = None,
                          numberOfSongs: int = 25, public: bool = True, description: str = ""):
     """
     """
     # extract ids and merge the id lists
-    mergedIdsList: list[str] = _mergePlaylists(apiReq, playlist1, playlist2, playlist3, numberOfSongs)
+    mergedIdsList: list[str] = _mergePlaylists(sp_req, playlist1, playlist2, playlist3, numberOfSongs)
 
     # create playlist with the elements of the merged ids
-    return _createPlaylistWithElements(apiReq, mergedIdsList, playlist3 is not None, numberOfSongs, public, description)
+    return _createPlaylistWithElements(sp_req, mergedIdsList, playlist3 is not None, numberOfSongs, public, description)
 
 
-def _mergePlaylists(apiReq, playlist1: str, playlist2: str, playlist3: str,
+def _mergePlaylists(sp_req, playlist1: str, playlist2: str, playlist3: str,
                     numberOfSongs: int) -> list[str]:
     """
     """
     # get tracks of the playlists
-    tracks1 = apiReq.getPlaylistItems(playlist1, limit=numberOfSongs)
+    tracks1 = sp_req.getPlaylistItems(playlist1, limit=numberOfSongs)
     print(f"LOG: Get songs - part 1: {tracks1}")
-    tracks2 = apiReq.getPlaylistItems(playlist2, limit=numberOfSongs)
+    tracks2 = sp_req.getPlaylistItems(playlist2, limit=numberOfSongs)
     print(f"LOG: Get songs - part 2: {tracks2}")
 
     # convert to the ids
@@ -82,7 +82,7 @@ def _mergePlaylists(apiReq, playlist1: str, playlist2: str, playlist3: str,
     # check if there is a third playlist
     if playlist3 is not None:
         # get tracks of third playlist
-        tracks3 = apiReq.getPlaylistItems(playlist3, limit=numberOfSongs)
+        tracks3 = sp_req.getPlaylistItems(playlist3, limit=numberOfSongs)
         print(f"LOG: Get songs - part 3: {tracks3}")
         # convert to the ids
         ids3: list[str] = idsOfTracks(tracks3)
@@ -97,7 +97,7 @@ def _mergePlaylists(apiReq, playlist1: str, playlist2: str, playlist3: str,
     return mergedIdsList
 
 
-def _createPlaylistWithElements(apiReq, mergedIdsList: list[str], threePlaylists: bool,
+def _createPlaylistWithElements(sp_req, mergedIdsList: list[str], threePlaylists: bool,
                                 numberOfSongs: int, public: bool, description: str) -> list:
     """
     """
@@ -106,7 +106,7 @@ def _createPlaylistWithElements(apiReq, mergedIdsList: list[str], threePlaylists
 
     # create new empty playlist
     playlistName: str = f"Dohmän {date.today().strftime('%d.%m.')}"
-    playlist = apiReq.createPlaylist(playlistName, public=public, description=description)
+    playlist = sp_req.createPlaylist(playlistName, public=public, description=description)
     print(f"LOG: Create playlist: {playlist}")
     # save playlist id
     playlistId = playlist['id']
@@ -118,7 +118,7 @@ def _createPlaylistWithElements(apiReq, mergedIdsList: list[str], threePlaylists
     for i in range(((totalTrackAmount - 1) // 100) + 1):
         lowerBound = 100 * i
         upperBound = (100 * i) + 100
-        toAppend = apiReq.addItemsToPlaylist(playlistId, songUris[lowerBound:upperBound])
+        toAppend = sp_req.addItemsToPlaylist(playlistId, songUris[lowerBound:upperBound])
         addedElements.append(toAppend)
         print(f"LOG: Added elements: {toAppend}")
 
@@ -142,7 +142,7 @@ def idsOfTopTracks(tracks: dict) -> list[str]:  # todo really needed ?
 def convertTrackIdsToUris(ids: list[str]) -> list[str]:
     """
     """
-    return [f"spotify (legacy):track:{song_id}" for song_id in ids]
+    return [f"spotify:track:{song_id}" for song_id in ids]
 
 
 def getTotalAmountOfTracksInLikedTracks(response: dict) -> int:
