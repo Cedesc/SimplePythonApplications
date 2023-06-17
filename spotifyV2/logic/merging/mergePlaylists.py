@@ -1,9 +1,10 @@
 from random import shuffle
 from datetime import date
 from spotifyV2.mapper.mapperFunctions import ids_of_tracks, convert_track_ids_to_uris
+from spotifyV2.spotipyRequests.SpotipyRequests import SpotipyRequests
 
 
-def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: str = None,
+def create_merged_playlist(sp_req: SpotipyRequests, playlist1: str, playlist2: str, playlist3: str = None,
                            number_of_songs: int = 25, public: bool = True, description: str = ""):
     """
     """
@@ -25,7 +26,7 @@ def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: st
     return
 
 
-def _merge_playlists(sp_req, playlist1: str, playlist2: str, playlist3: str,
+def _merge_playlists(sp_req: SpotipyRequests, playlist1: str, playlist2: str, playlist3: str,
                      number_of_songs: int) -> list[str]:
     """
     """
@@ -61,7 +62,7 @@ def _merge_playlists(sp_req, playlist1: str, playlist2: str, playlist3: str,
     return merged_ids_list
 
 
-def _create_playlist_with_elements(sp_req, merged_ids_list: list[str], three_playlists: bool,
+def _create_playlist_with_elements(sp_req: SpotipyRequests, merged_ids_list: list[str], three_playlists: bool,
                                    number_of_songs: int, public: bool, description: str) -> tuple[str, str]:
     """
     Returns:
