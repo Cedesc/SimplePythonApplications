@@ -3,54 +3,6 @@ from datetime import date
 from spotifyV2.mapper.mapperFunctions import ids_of_tracks, convert_track_ids_to_uris
 
 
-def _arrange_elements(list1: list[str], list2: list[str]) -> list[str]:
-    """
-    Merges two lists two one.
-
-    Example:
-        list1 = [ 1 , 2, 3 ] \n
-        list2 = [ first , second , third ] \n
-        result = [ 1 , first , 2 , second , 3 , third ]
-
-    Raises:
-        Exception: If the lists haven't the same length
-    """
-    length: int = len(list1)
-
-    # check if the length of the lists are equal
-    if length != len(list2):
-        raise Exception("Lists are not the same length.")
-
-    return [list1[i // 2] if i % 2 == 0
-            else list2[i // 2]
-            for i in range(length * 2)]
-
-
-def _arrange_elements_for_three_playlists(list1: list[str], list2: list[str], list3: list[str]) -> list[str]:
-    """
-    Merges three lists two one.
-
-    Example:
-        list1 = [ 1 , 2 , 3 ] \n
-        list2 = [ first , second , third ] \n
-        list3 = [ one , two , three ] \n
-        result = [ 1 , first , one , 2 , second , two , 3 , third , three ]
-
-    Raises:
-        Exception: If the lists haven't the same length
-    """
-    length: int = len(list1)
-
-    # check if the length of the lists is equal
-    if length != len(list2) or length != len(list3):
-        raise Exception("Lists are not the same length.")
-
-    return [list1[i // 3] if i % 3 == 0
-            else (list2[i // 3] if i % 3 == 1
-            else list3[i // 3])
-            for i in range(length * 3)]
-
-
 def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: str = None,
                            number_of_songs: int = 25, public: bool = True, description: str = ""):
     """
@@ -138,3 +90,53 @@ def _create_playlist_with_elements(sp_req, merged_ids_list: list[str], three_pla
 
     # returns the name and the URL of the newly created playlist
     return playlist['name'], playlist['external_urls']['spotify']
+
+
+def _arrange_elements(list1: list[str], list2: list[str]) -> list[str]:
+    """
+    Merges two lists two one.
+
+    Example:
+        list1 = [ 1 , 2, 3 ] \n
+        list2 = [ first , second , third ] \n
+        result = [ 1 , first , 2 , second , 3 , third ]
+
+    Raises:
+        Exception: If the lists haven't the same length
+    """
+    length: int = len(list1)
+
+    # check if the length of the lists are equal
+    if length != len(list2):
+        raise Exception("Lists are not the same length.")
+
+    return [list1[i // 2] if i % 2 == 0
+            else list2[i // 2]
+            for i in range(length * 2)]
+
+
+def _arrange_elements_for_three_playlists(list1: list[str], list2: list[str], list3: list[str]) -> list[str]:
+    """
+    Merges three lists two one.
+
+    Example:
+        list1 = [ 1 , 2 , 3 ] \n
+        list2 = [ first , second , third ] \n
+        list3 = [ one , two , three ] \n
+        result = [ 1 , first , one , 2 , second , two , 3 , third , three ]
+
+    Raises:
+        Exception: If the lists haven't the same length
+    """
+    length: int = len(list1)
+
+    # check if the length of the lists is equal
+    if length != len(list2) or length != len(list3):
+        raise Exception("Lists are not the same length.")
+
+    return [list1[i // 3] if i % 3 == 0
+            else (list2[i // 3] if i % 3 == 1
+            else list3[i // 3])
+            for i in range(length * 3)]
+
+
