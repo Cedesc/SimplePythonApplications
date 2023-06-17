@@ -4,7 +4,7 @@ from spotipyRequests.SpotipyRequests import SpotipyRequests
 # Docu https://developer.spotify.com/documentation/web-api
 # Dashboard https://developer.spotify.com/dashboard
 
-
+# todo write one line that formats the original link to the id directly below the attribute (and overwrite it)
 christians_dohmaen_part_id \
     = "23BUjbevO4zQdvg4nfPqiI"  # https://open.spotify.com/playlist/23BUjbevO4zQdvg4nfPqiI?si=ac7bf20bb4a44683
 robins_dohmaen_part_id \
@@ -19,11 +19,11 @@ PLAYLIST_3 = None
 
 if __name__ == '__main__':
     # create instance of SpotipyRequests
-    spReqs = SpotipyRequests()
+    sp_reqs = SpotipyRequests()
 
     # create merged playlist
     create_merged_playlist(
-        spReqs,
+        sp_reqs,
         PLAYLIST_1,
         PLAYLIST_2,
         playlist3=PLAYLIST_3,

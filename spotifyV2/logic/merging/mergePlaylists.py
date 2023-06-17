@@ -79,12 +79,12 @@ def _create_playlist_with_elements(sp_req: SpotipyRequests, merged_ids_list: lis
     playlist_id = playlist['id']
 
     # fill playlist with songs
-    # (multiple calls of add_items_to_playlist() are necessary since only 100 items can be added at once)
+    # (multiple calls of add_items_to_playlist() can be necessary since only 100 items can be added at once)
     total_track_amount = (number_of_songs * 2) if three_playlists else (number_of_songs * 3)
     added_elements = []
     for i in range(((total_track_amount - 1) // 100) + 1):
         lower_bound = 100 * i
-        upper_bound = (100 * i) + 100
+        upper_bound = lower_bound + 100
         to_append = sp_req.add_items_to_playlist(playlist_id, song_uris[lower_bound:upper_bound])
         added_elements.append(to_append)
         print(f"LOG: Added elements: {to_append}")
