@@ -5,10 +5,13 @@ from spotipyRequests.SpotipyRequests import SpotipyRequests
 # Dashboard https://developer.spotify.com/dashboard
 
 
-new_playlist = "2oTgILV5TT4gnxeaS8aKIm"
+new_playlist = "0SIloxUdG344oDiIbLtJKg"
 old_playlists = [
-    "2ep6habZRalXyYSos9YvCA",
-    "23BUjbevO4zQdvg4nfPqiI"
+    "38gQ00jyC5bs1sll5PVYCi",
+    "0ksBuAHs1AE9OtRQTksJ62",
+    "7rL7cPOPJxLUYm7nrWRwXP",
+    "6m4bhGtAOAy4NvyChbpHaS",
+    "1iR6gomo3Z17GBs4UyISJM"
 ]
 
 
