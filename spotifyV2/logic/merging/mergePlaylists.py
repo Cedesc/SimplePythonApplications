@@ -59,7 +59,7 @@ def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: st
     merged_ids_list: list[str] = _merge_playlists(sp_req, playlist1, playlist2, playlist3, number_of_songs)
 
     # create playlist with the elements of the merged ids
-    return _create_playlist_with_elements(
+    playlist_name, playlist_url = _create_playlist_with_elements(
         sp_req,
         merged_ids_list,
         playlist3 is not None,
@@ -67,6 +67,10 @@ def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: st
         public,
         description
     )
+
+    # print name and link to the newly created playlist
+    print(f"Created playlist \"{playlist_name}\" ({playlist_url})")
+    return
 
 
 def _merge_playlists(sp_req, playlist1: str, playlist2: str, playlist3: str,
@@ -106,8 +110,10 @@ def _merge_playlists(sp_req, playlist1: str, playlist2: str, playlist3: str,
 
 
 def _create_playlist_with_elements(sp_req, merged_ids_list: list[str], three_playlists: bool,
-                                   number_of_songs: int, public: bool, description: str) -> list:
+                                   number_of_songs: int, public: bool, description: str) -> tuple[str, str]:
     """
+    Returns:
+        Name and URL of the newly created playlist.
     """
     # convert ids to uris
     song_uris: list[str] = convert_track_ids_to_uris(merged_ids_list)
@@ -130,4 +136,5 @@ def _create_playlist_with_elements(sp_req, merged_ids_list: list[str], three_pla
         added_elements.append(to_append)
         print(f"LOG: Added elements: {to_append}")
 
-    return added_elements
+    # returns the name and the URL of the newly created playlist
+    return playlist['name'], playlist['external_urls']['spotify']
