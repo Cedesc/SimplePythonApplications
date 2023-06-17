@@ -17,15 +17,15 @@ class SpotipyRequests:
         ))
         self.user_name = os.getenv("USER_NAME")
 
-    def getTopSongs(self, timeRange: str = 'short_term', limit: int = 50):
+    def get_top_songs(self, time_range: str = 'short_term', limit: int = 50):
         raise Exception("Not yet implemented")
 
-    def getLikedSongs(self, limit: int = 50, offset: int = 0):
+    def get_liked_songs(self, limit: int = 50, offset: int = 0):
         raise Exception("Not yet implemented")
 
-    def getPlaylistItems(self, playlistId: str, limit: int = 100):
+    def get_playlist_items(self, playlist_id: str, limit: int = 100):
         return self.sp.playlist_items(
-            playlist_id=playlistId,
+            playlist_id=playlist_id,
             fields=None,
             limit=limit,
             offset=0,
@@ -33,7 +33,7 @@ class SpotipyRequests:
             additional_types=("track", "episode")
         )
 
-    def createPlaylist(self, name: str, public: bool = True, description: str = ""):
+    def create_playlist(self, name: str, public: bool = True, description: str = ""):
         return self.sp.user_playlist_create(
             user=self.user_name,
             name=name,
@@ -42,9 +42,9 @@ class SpotipyRequests:
             description=description
         )
 
-    def addItemsToPlaylist(self, playlistId: str, uris: list[str]):
+    def add_items_to_playlist(self, playlist_id: str, uris: list[str]):
         return self.sp.playlist_add_items(
-            playlist_id=playlistId,
+            playlist_id=playlist_id,
             items=uris,
             position=None
         )

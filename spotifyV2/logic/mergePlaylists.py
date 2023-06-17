@@ -2,7 +2,7 @@ from random import shuffle
 from datetime import date
 
 
-def _arrangeElements(list1: list[str], list2: list[str]) -> list[str]:
+def _arrange_elements(list1: list[str], list2: list[str]) -> list[str]:
     """
     Merges two lists two one.
 
@@ -25,15 +25,15 @@ def _arrangeElements(list1: list[str], list2: list[str]) -> list[str]:
             for i in range(length * 2)]
 
 
-def _arrangeElementsForThreePlaylists(list1: list[str], list2: list[str], list3: list[str]) -> list[str]:  # todo test
+def _arrange_elements_for_three_playlists(list1: list[str], list2: list[str], list3: list[str]) -> list[str]:
     """
     Merges three lists two one.
 
     Example:
         list1 = [ 1 , 2 , 3 ] \n
         list2 = [ first , second , third ] \n
-        list3 = [ eins , zwei , drei ] \n
-        result = [ 1 , first , eins , 2 , second , zwei , 3 , third , drei ]
+        list3 = [ one , two , three ] \n
+        result = [ 1 , first , one , 2 , second , two , 3 , third , three ]
 
     Raises:
         Exception: If the lists haven't the same length
@@ -50,30 +50,37 @@ def _arrangeElementsForThreePlaylists(list1: list[str], list2: list[str], list3:
             for i in range(length * 3)]
 
 
-def createMergedPlaylist(sp_req, playlist1: str, playlist2: str, playlist3: str = None,
-                         numberOfSongs: int = 25, public: bool = True, description: str = ""):
+def create_merged_playlist(sp_req, playlist1: str, playlist2: str, playlist3: str = None,
+                           number_of_songs: int = 25, public: bool = True, description: str = ""):
     """
     """
     # extract ids and merge the id lists
-    mergedIdsList: list[str] = _mergePlaylists(sp_req, playlist1, playlist2, playlist3, numberOfSongs)
+    merged_ids_list: list[str] = _merge_playlists(sp_req, playlist1, playlist2, playlist3, number_of_songs)
 
     # create playlist with the elements of the merged ids
-    return _createPlaylistWithElements(sp_req, mergedIdsList, playlist3 is not None, numberOfSongs, public, description)
+    return _create_playlist_with_elements(
+        sp_req,
+        merged_ids_list,
+        playlist3 is not None,
+        number_of_songs,
+        public,
+        description
+    )
 
 
-def _mergePlaylists(sp_req, playlist1: str, playlist2: str, playlist3: str,
-                    numberOfSongs: int) -> list[str]:
+def _merge_playlists(sp_req, playlist1: str, playlist2: str, playlist3: str,
+                     number_of_songs: int) -> list[str]:
     """
     """
     # get tracks of the playlists
-    tracks1 = sp_req.getPlaylistItems(playlist1, limit=numberOfSongs)
+    tracks1 = sp_req.get_playlist_items(playlist1, limit=number_of_songs)
     print(f"LOG: Get songs - part 1: {tracks1}")
-    tracks2 = sp_req.getPlaylistItems(playlist2, limit=numberOfSongs)
+    tracks2 = sp_req.get_playlist_items(playlist2, limit=number_of_songs)
     print(f"LOG: Get songs - part 2: {tracks2}")
 
     # convert to the ids
-    ids1: list[str] = idsOfTracks(tracks1)
-    ids2: list[str] = idsOfTracks(tracks2)
+    ids1: list[str] = ids_of_tracks(tracks1)
+    ids2: list[str] = ids_of_tracks(tracks2)
 
     # shuffle lists
     shuffle(ids1)
@@ -82,70 +89,70 @@ def _mergePlaylists(sp_req, playlist1: str, playlist2: str, playlist3: str,
     # check if there is a third playlist
     if playlist3 is not None:
         # get tracks of third playlist
-        tracks3 = sp_req.getPlaylistItems(playlist3, limit=numberOfSongs)
+        tracks3 = sp_req.get_playlist_items(playlist3, limit=number_of_songs)
         print(f"LOG: Get songs - part 3: {tracks3}")
         # convert to the ids
-        ids3: list[str] = idsOfTracks(tracks3)
+        ids3: list[str] = ids_of_tracks(tracks3)
         # shuffle list
         shuffle(ids3)
         # merge all three lists
-        mergedIdsList: list[str] = _arrangeElementsForThreePlaylists(ids1, ids2, ids3)
+        merged_ids_list: list[str] = _arrange_elements_for_three_playlists(ids1, ids2, ids3)
     else:
         # merge both lists
-        mergedIdsList: list[str] = _arrangeElements(ids1, ids2)
+        merged_ids_list: list[str] = _arrange_elements(ids1, ids2)
 
-    return mergedIdsList
+    return merged_ids_list
 
 
-def _createPlaylistWithElements(sp_req, mergedIdsList: list[str], threePlaylists: bool,
-                                numberOfSongs: int, public: bool, description: str) -> list:
+def _create_playlist_with_elements(sp_req, merged_ids_list: list[str], three_playlists: bool,
+                                   number_of_songs: int, public: bool, description: str) -> list:
     """
     """
     # convert ids to uris
-    songUris: list[str] = convertTrackIdsToUris(mergedIdsList)
+    song_uris: list[str] = convert_track_ids_to_uris(merged_ids_list)
 
     # create new empty playlist
-    playlistName: str = f"Dohmän {date.today().strftime('%d.%m.')}"
-    playlist = sp_req.createPlaylist(playlistName, public=public, description=description)
+    playlist_name: str = f"Dohmän {date.today().strftime('%d.%m.')}"
+    playlist = sp_req.create_playlist(playlist_name, public=public, description=description)
     print(f"LOG: Create playlist: {playlist}")
     # save playlist id
-    playlistId = playlist['id']
+    playlist_id = playlist['id']
 
     # fill playlist with songs
     # (multiple calls of add_items_to_playlist() are necessary since only 100 items can be added at once)
-    totalTrackAmount = (numberOfSongs * 2) if threePlaylists else (numberOfSongs * 3)
-    addedElements = []
-    for i in range(((totalTrackAmount - 1) // 100) + 1):
-        lowerBound = 100 * i
-        upperBound = (100 * i) + 100
-        toAppend = sp_req.addItemsToPlaylist(playlistId, songUris[lowerBound:upperBound])
-        addedElements.append(toAppend)
-        print(f"LOG: Added elements: {toAppend}")
+    total_track_amount = (number_of_songs * 2) if three_playlists else (number_of_songs * 3)
+    added_elements = []
+    for i in range(((total_track_amount - 1) // 100) + 1):
+        lower_bound = 100 * i
+        upper_bound = (100 * i) + 100
+        to_append = sp_req.add_items_to_playlist(playlist_id, song_uris[lower_bound:upper_bound])
+        added_elements.append(to_append)
+        print(f"LOG: Added elements: {to_append}")
 
-    return addedElements
+    return added_elements
 
 
 # Mapper functions  todo delete if mapper can be imported
 
-def idsOfTracks(tracks: dict) -> list[str]:
+def ids_of_tracks(tracks: dict) -> list[str]:
     """
     """
     return list(map(lambda track: track['track']['id'], tracks['items']))
 
 
-def idsOfTopTracks(tracks: dict) -> list[str]:  # todo really needed ?
+def ids_of_top_tracks(tracks: dict) -> list[str]:  # todo really needed ?
     """
     """
     return list(map(lambda track: track['id'], tracks['items']))
 
 
-def convertTrackIdsToUris(ids: list[str]) -> list[str]:
+def convert_track_ids_to_uris(ids: list[str]) -> list[str]:
     """
     """
     return [f"spotify:track:{song_id}" for song_id in ids]
 
 
-def getTotalAmountOfTracksInLikedTracks(response: dict) -> int:
+def get_total_amount_of_tracks_in_liked_tracks(response: dict) -> int:
     """
     Currently the result is lower than the actual amount since I have
     liked songs that aren't in Spotify, like 'Motiva' by 'Bladesa'.

@@ -1,4 +1,4 @@
-from logic.mergePlaylists import createMergedPlaylist
+from logic.mergePlaylists import create_merged_playlist
 from spotipyRequests.SpotipyRequests import SpotipyRequests
 
 # Docu https://developer.spotify.com/documentation/web-api
@@ -22,14 +22,12 @@ if __name__ == '__main__':
     spReqs = SpotipyRequests()
 
     # create merged playlist
-    createMergedPlaylist(
+    create_merged_playlist(
         spReqs,
         PLAYLIST_1,
         PLAYLIST_2,
         playlist3=PLAYLIST_3,
-        numberOfSongs=NUMBER_OF_SONGS,
+        number_of_songs=NUMBER_OF_SONGS,
         public=True,
         description=""
     )
-
-# todo migrate saveTopAndLikedTracks and SaveTracksMainLegacy
