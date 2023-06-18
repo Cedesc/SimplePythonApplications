@@ -44,7 +44,7 @@ def create_top_tracks_save(
     """
     # get songs of favorites
     tracks = sp_req.get_top_songs(time_range=time_range, limit=number_of_songs, offset=0)
-    print(f"LOG: Get top tracks: {tracks}")
+    print(f"LOG (top tracks): Get top tracks: {tracks}")
 
     # convert to the ids
     ids: list[str] = ids_of_top_tracks(tracks)
@@ -55,13 +55,13 @@ def create_top_tracks_save(
     # create new playlist (moving it to the right folder isn't possible so far)
     playlist_name: str = _generate_playlist_name("Top Tracks")
     playlist = sp_req.create_playlist(playlist_name, public=True, description="")
-    print(f"LOG: Create playlist: {playlist}")
+    print(f"LOG (top tracks): Create playlist: {playlist}")
     # save playlist id
     playlist_id = playlist['id']
 
     # fill playlist with songs
     added_elements = sp_req.add_items_to_playlist(playlist_id, uris)
-    print(f"LOG: Added elements: {added_elements}")
+    print(f"LOG (top tracks): Added elements: {added_elements}")
 
     return added_elements
 
@@ -76,11 +76,11 @@ def create_liked_tracks_save(sp_req: SpotipyRequests):
     # (saved in the list 'track_packages' instead of 'tracks' because of the maximum limit of 50)
     track_packages = [sp_req.get_liked_songs(limit=50, offset=0)]
     # get amount of liked songs
-    total_track_amount: int = sp_req.get_total_track_amount_of_liked_tracks(track_packages[0])
+    total_track_amount: int = track_packages[0]['total']
     # necessary additional calls of get_like_songs()
     for i in range((total_track_amount-1) // 50):
         track_packages.append(sp_req.get_liked_songs(limit=50, offset=(i+1)*50))
-    print(f"Get liked tracks")
+    print(f"LOG (liked tracks): Get liked tracks: {track_packages}")
 
     # convert to the ids
     # (multiple calls of extract_ids_get_playlist_items() are necessary because the tracks aren't all in one variable)
@@ -94,7 +94,7 @@ def create_liked_tracks_save(sp_req: SpotipyRequests):
     # create new playlist (moving it to the right folder isn't possible so far)
     playlist_name: str = _generate_playlist_name("Liked Tracks")
     playlist = sp_req.create_playlist(playlist_name, public=True, description="")
-    print(f"Create playlist")
+    print(f"LOG (liked tracks): Create playlist: {playlist}")
     # save playlist id
     playlist_id = playlist['id']
 
@@ -106,6 +106,6 @@ def create_liked_tracks_save(sp_req: SpotipyRequests):
         upper_bound = (100 * i) + 100
         added_elements_package.append(
             sp_req.add_items_to_playlist(playlist_id, uris[lower_bound:upper_bound]))
-    print(f"Added elements")
+    print(f"LOG (liked tracks): Added elements: {added_elements_package}")
 
     return added_elements_package

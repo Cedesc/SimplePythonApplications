@@ -2,6 +2,8 @@ import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+# Spotify API https://developer.spotify.com/documentation/web-api/reference/get-an-album
+
 
 class SpotipyRequests:
 
@@ -13,7 +15,7 @@ class SpotipyRequests:
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri,
-            scope='playlist-modify-private playlist-modify-public'
+            scope='playlist-modify-private playlist-modify-public user-library-read'
         ))
         self.user_name = os.getenv("USER_NAME")
 
@@ -40,24 +42,19 @@ class SpotipyRequests:
         )
 
     def add_items_to_playlist(self, playlist_id: str, uris: list[str]):
-        return self.sp.playlist_add_items(
-            playlist_id=playlist_id,
-            items=uris,
-            position=None
-        )
+        return self.sp.playlist_add_items( playlist_id=playlist_id, items=uris, position=None)
 
     def get_number_of_tracks_in_playlist(self, playlist_id):
         return self.sp.playlist(playlist_id=playlist_id)['tracks']['total']
 
     def get_top_songs(self, time_range: str = 'short_term', limit: int = 50, offset: int = 0):
-        return self.sp.current_user_top_tracks(
-            limit=limit,
-            offset=offset,
-            time_range=time_range
-        )
+        # return self.sp.current_user_top_tracks(limit=limit, offset=offset, time_range=time_range)
+        return self.sp.current_user_top_tracks()
+        # todo look in docu and find the needed scope for this request
+        #  https://developer.spotify.com/documentation/web-api/reference/get-audio-features
 
     def get_liked_songs(self, limit: int = 50, offset: int = 0):
-        raise Exception("Not yet implemented")
+        return self.sp.current_user_saved_tracks(limit=limit, offset=offset, market=None)
 
     def get_total_track_amount_of_liked_tracks(self, response: dict):
         raise Exception("Not yet implemented")

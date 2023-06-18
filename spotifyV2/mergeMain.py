@@ -10,11 +10,15 @@ christians_dohmaen_part_id \
 robins_dohmaen_part_id \
     = "1OgD3pMv23u5EKIRTZwWby"  # https://open.spotify.com/playlist/1OgD3pMv23u5EKIRTZwWby?si=980fb4faeb4e4213
 
+wump = "5pVmijmcJ5COlfEgJ9KM44"
+tatata = "1QbpcsQMHoVPKnb9qII2XQ"
+watson = "10m4SPaR1AePngKCn7jIsz"
 
-PLAYLIST_1 = christians_dohmaen_part_id
-PLAYLIST_2 = robins_dohmaen_part_id
-NUMBER_OF_SONGS = 25
-PLAYLIST_3 = None
+
+PLAYLIST_1 = wump
+PLAYLIST_2 = tatata
+NUMBER_OF_SONGS = 33
+PLAYLIST_3 = watson
 
 
 if __name__ == '__main__':
