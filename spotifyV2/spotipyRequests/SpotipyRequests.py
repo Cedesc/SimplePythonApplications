@@ -17,16 +17,6 @@ class SpotipyRequests:
         ))
         self.user_name = os.getenv("USER_NAME")
 
-    def get_top_songs(self, time_range: str = 'short_term', limit: int = 50, offset: int = 0):
-        return self.sp.current_user_top_tracks(
-            limit=limit,
-            offset=offset,
-            time_range=time_range
-        )
-
-    def get_liked_songs(self, limit: int = 50, offset: int = 0):
-        raise Exception("Not yet implemented")
-
     # todo With a playlist of >100 elements, not all elements can be retrieved.
     #  Implement the solutions of calculateNewlyAddedTracks._track_is_in_playlist or
     #  mergePlaylists._create_playlist_with_elements and look at the other methods for similar problems
@@ -58,3 +48,16 @@ class SpotipyRequests:
 
     def get_number_of_tracks_in_playlist(self, playlist_id):
         return self.sp.playlist(playlist_id=playlist_id)['tracks']['total']
+
+    def get_top_songs(self, time_range: str = 'short_term', limit: int = 50, offset: int = 0):
+        return self.sp.current_user_top_tracks(
+            limit=limit,
+            offset=offset,
+            time_range=time_range
+        )
+
+    def get_liked_songs(self, limit: int = 50, offset: int = 0):
+        raise Exception("Not yet implemented")
+
+    def get_total_track_amount_of_liked_tracks(self, response: dict):
+        raise Exception("Not yet implemented")
