@@ -4,21 +4,21 @@ from spotipyRequests.SpotipyRequests import SpotipyRequests
 # Docu https://developer.spotify.com/documentation/web-api
 # Dashboard https://developer.spotify.com/dashboard
 
+# For quick startup, read the README file
+# todo add readme for quick setup after merge and with all things to take care (number of songs, links, third song, ...)
+#  - add three env variables: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, USER_NAME
+
 # todo write one line that formats the original link to the id directly below the attribute (and overwrite it)
 christians_dohmaen_part_id \
     = "23BUjbevO4zQdvg4nfPqiI"  # https://open.spotify.com/playlist/23BUjbevO4zQdvg4nfPqiI?si=ac7bf20bb4a44683
 robins_dohmaen_part_id \
     = "1OgD3pMv23u5EKIRTZwWby"  # https://open.spotify.com/playlist/1OgD3pMv23u5EKIRTZwWby?si=980fb4faeb4e4213
 
-wump = "5pVmijmcJ5COlfEgJ9KM44"
-tatata = "1QbpcsQMHoVPKnb9qII2XQ"
-watson = "10m4SPaR1AePngKCn7jIsz"
 
-
-PLAYLIST_1 = wump
-PLAYLIST_2 = tatata
-NUMBER_OF_SONGS = 33
-PLAYLIST_3 = watson
+PLAYLIST_1 = christians_dohmaen_part_id
+PLAYLIST_2 = robins_dohmaen_part_id
+NUMBER_OF_SONGS = 25
+PLAYLIST_3 = None
 
 
 if __name__ == '__main__':
